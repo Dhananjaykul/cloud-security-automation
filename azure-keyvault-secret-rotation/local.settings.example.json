@@ -1,0 +1,9 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "<LOCAL_STORAGE_CONNECTION_STRING_OR_UseDevelopmentStorage=true>",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "KEY_VAULT_URL": "https://<your-vault-name>.vault.azure.net/",
+    "SECRET_NAME": "<your-demo-secret-name>"
+  }
+}

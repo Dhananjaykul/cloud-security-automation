@@ -1,0 +1,13 @@
+.venv/
+.venv-*/
+__pycache__/
+.python_packages/
+local.settings.json
+.env
+.env.*
+*.pem
+*.pfx
+*.key
+.DS_Store
+*.log
+*.zip

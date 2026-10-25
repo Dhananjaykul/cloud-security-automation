@@ -1,0 +1,8 @@
+.git*
+.venv/
+.venv-*/
+__pycache__/
+local.settings.json
+.env*
+screenshots/
+docs/
