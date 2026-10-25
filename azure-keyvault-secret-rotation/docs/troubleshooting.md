@@ -10,7 +10,9 @@ These are **actual issues encountered during the lab**, not hypothetical failure
 
 **Fix:** Obtain the **function-specific URL/key** from Azure Portal → Function App → Functions → `rotate_secret` → Get Function URL. Invoke with the valid `?code=` parameter. Never publish the URL with its key.
 
-**Evidence:** `[Screenshot: http-401-redacted.png]`
+![HTTP 401 Unauthorized](../screenshots/http-401-redacted.png)
+
+*Figure 1: The deployed HTTP-triggered Function rejected a request without a valid Function key.*
 
 ## Case 2 — Deployed Function returned 500 / ForbiddenByRbac
 
@@ -29,7 +31,9 @@ Inner error: ForbiddenByRbac
 
 **Verification:** Cloud HTTP rotation returned 200 and created a new secret version.
 
-**Evidence:** `[Screenshot: forbidden-by-rbac-redacted.png]`, `[Screenshot: managed-identity-role-redacted.png]`
+![Key Vault ForbiddenByRbac](../screenshots/forbidden-by-rbac-redacted.png)
+
+*Figure 2: Application Insights showed that the Function's managed identity lacked permission to read the Key Vault secret.*
 
 ## Case 3 — Microsoft.EventGrid resource provider not registered
 
@@ -46,7 +50,9 @@ az provider show --namespace Microsoft.EventGrid --query registrationState -o ts
 
 **Verification:** Provider showed `Registered`; Event Grid subscription was created and displayed `Succeeded`.
 
-**Evidence:** `[Screenshot: provider-not-registered-redacted.png]`
+![Event Grid Provider Registration Error](../screenshots/provider-not-registered-redacted.png)
+
+*Figure 4: The Azure subscription had not registered the Microsoft.EventGrid resource provider.*
 
 ## Case 4 — Event Grid trigger returned 404; System keys empty
 
@@ -80,7 +86,9 @@ az functionapp keys list \
 
 **Interpretation:** The extension initialized after the configuration change. This strongly supports the missing extension bundle as the cause of the absent system key. A direct causal explanation for every earlier `404` was not independently proven; avoid claiming more than the evidence supports.
 
-**Evidence:** `[Screenshot: system-keys-empty-redacted.png]`, `[Screenshot: system-key-registered-redacted.png]`
+**Evidence — System keys missing**
+
+![Azure Function System Keys Missing](../screenshots/system-keys-empty-redacted.png)
 
 ## Case 5 — Python runtime mismatch warning
 
@@ -89,8 +97,6 @@ az functionapp keys list \
 **Investigation:** Flex Consumption stored runtime under `properties.functionAppConfig.runtime`; traditional `linuxFxVersion` queries returned empty/null.
 
 **Outcome:** Remote build and deployment succeeded; later HTTP Function invocation worked after RBAC was corrected. This warning was not the cause of the `ForbiddenByRbac` failure.
-
-**Evidence:** `[Screenshot: runtime-warning-redacted.png]`
 
 ## Debugging sequence that worked
 
@@ -101,11 +107,3 @@ az functionapp keys list \
 5. Confirm the right role is assigned **at the right scope**.
 6. For trigger problems, check `host.json`, function indexing, extension keys, and event subscription endpoint.
 7. Change one thing at a time, retest once, and record the evidence.
-
-## Screenshot publication checklist
-
-- [ ] No `?code=` signed URLs, function/master/system keys, bearer tokens, or storage connection strings.
-- [ ] No actual secret values or encoded versions of them.
-- [ ] No personal email addresses or unrelated tenant/account details.
-- [ ] Crop to the error and the fix, with readable text.
-- [ ] Label each screenshot with the symptom and resolution.
