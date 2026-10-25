@@ -8,6 +8,8 @@ A credential stored in Key Vault may remain unchanged for years. Expiration poli
 
 **Scope boundary:** This code generates a demonstration random secret and writes a new Key Vault version. It does **not** update a database password, refresh an application, verify downstream authentication, or revoke the old credential. Do not use it unchanged to rotate production credentials.
 
+📖 Read the full walkthrough: [Azure Key Vault Secret Rotation](https://medium.com/@kulkarnidhananjay89)
+
 ## Architecture
 
 ```mermaid
